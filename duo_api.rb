@@ -23,7 +23,8 @@ class DuoApi
     ca_file = File.join(File.dirname(__FILE__), "cacert.pem")
 
     response = Net::HTTP.start(uri.host, uri.port,
-                               :use_ssl => true, :ca_file => ca_file) do |http|
+                               :use_ssl => true, :ca_file => ca_file,
+                               :verify_mode => OpenSSL::SSL::VERIFY_PEER) do |http|
       http.request(request)
     end
   end
