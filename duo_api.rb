@@ -20,7 +20,7 @@ class DuoApi
     request.basic_auth(@ikey, signed)
     request['Date'] = current_date
 
-    ca_file = File.join(File.dirname(__FILE__), "cacert.pem")
+    ca_file = File.join(File.dirname(__FILE__), "ca_certs.pem")
 
     response = Net::HTTP.start(uri.host, uri.port,
                                :use_ssl => true, :ca_file => ca_file,
