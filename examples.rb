@@ -1,8 +1,11 @@
 require_relative 'duo_api'
 
-IKEY = ''
-SKEY = ''
-HOST = ''
+IKEY = ARGV[0]
+SKEY = ARGV[1]
+HOST = ARGV[2]
+unless HOST
+  abort "Usage: #{$0} IKEY SKEY HOST"
+end
 
 # Initialize the api
 client = DuoApi.new IKEY, SKEY, HOST
