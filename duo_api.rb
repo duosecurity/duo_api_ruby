@@ -6,10 +6,21 @@ require 'uri'
 class DuoApi
   @@encode_regex = Regexp.new("[^-_.~a-zA-Z\\d]")
 
-  def initialize(ikey, skey, host)
+  def initialize(ikey, skey, host, proxy=nil)
     @ikey = ikey
     @skey = skey
     @host = host
+    if proxy.nil?
+      @proxy = []
+    else
+      proxy_uri = URI.parse proxy
+      @proxy = [
+        proxy_uri.host,
+        proxy_uri.port,
+        proxy_uri.user,
+        proxy_uri.password
+      ]
+    end
   end
 
   def request(method, path, params=nil)
@@ -22,7 +33,7 @@ class DuoApi
 
     ca_file = File.join(File.dirname(__FILE__), "ca_certs.pem")
 
-    Net::HTTP.start(uri.host, uri.port,
+    Net::HTTP.start(uri.host, uri.port, *@proxy,
                     :use_ssl => true, :ca_file => ca_file,
                     :verify_mode => OpenSSL::SSL::VERIFY_PEER) do |http|
       http.request(request)
