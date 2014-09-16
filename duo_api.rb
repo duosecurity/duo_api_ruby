@@ -25,7 +25,7 @@ class DuoApi
 
   def request(method, path, params=nil)
     uri = request_uri(path, params)
-    current_date, signed = sign(method, uri.host, path, params, @skey)
+    current_date, signed = sign(method, uri.host, path, params)
 
     request = Net::HTTP.const_get(method.capitalize).new uri.to_s
     request.basic_auth(@ikey, signed)
@@ -70,7 +70,7 @@ class DuoApi
     [options[:date], canon.join("\n")]
   end
 
-  def sign(method, host, path, params, skey, options={})
+  def sign(method, host, path, params, options={})
     date, canon = canonicalize(method, host, path, params, :date => options[:date])
     [date, Digest::HMAC.hexdigest(canon, @skey, Digest::SHA1)]
   end

@@ -107,7 +107,7 @@ class TestSign < TestCase
     expected_date = 'Fri, 07 Dec 2012 17:18:00 -0000'
     expected_sig = 'f01811cbbf9561623ab45b893096267fd46a5178'
     actual_date, actual_sig = @client.send(:sign,
-      'PoSt', HOST, '/Foo/BaR2/qux', params, SKEY, :date => expected_date)
+      'PoSt', HOST, '/Foo/BaR2/qux', params, :date => expected_date)
     assert_equal(expected_sig, actual_sig)
     assert_equal(expected_date, actual_date)
   end
