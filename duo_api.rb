@@ -1,4 +1,4 @@
-require 'digest/hmac'
+require "openssl"
 require 'net/https'
 require 'time'
 require 'uri'
@@ -72,6 +72,6 @@ class DuoApi
 
   def sign(method, host, path, params, options={})
     date, canon = canonicalize(method, host, path, params, :date => options[:date])
-    [date, Digest::HMAC.hexdigest(canon, @skey, Digest::SHA1)]
+    [date, OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, @skey, canon)]
   end
 end
