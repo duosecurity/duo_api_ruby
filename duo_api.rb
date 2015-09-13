@@ -1,4 +1,4 @@
-require 'digest/hmac'
+require 'openssl'
 require 'net/https'
 require 'time'
 require 'uri'
@@ -34,7 +34,8 @@ class DuoApi
     ca_file = File.join(File.dirname(__FILE__), "ca_certs.pem")
 
     Net::HTTP.start(uri.host, uri.port, *@proxy,
-                    :use_ssl => true, :ca_file => ca_file,
+                    :use_ssl => true, 
+                    :ca_file => ca_file,
                     :verify_mode => OpenSSL::SSL::VERIFY_PEER) do |http|
       http.request(request)
     end
@@ -72,6 +73,6 @@ class DuoApi
 
   def sign(method, host, path, params, options={})
     date, canon = canonicalize(method, host, path, params, :date => options[:date])
-    [date, Digest::HMAC.hexdigest(canon, @skey, Digest::SHA1)]
+    [date, OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), @skey, canon)]
   end
 end
