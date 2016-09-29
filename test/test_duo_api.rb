@@ -1,5 +1,5 @@
-require_relative 'duo_api'
 require 'test/unit'
+require 'duo_api'
 
 IKEY = 'test_ikey'
 SKEY = 'gtdfxv9YgVBYcF6dl2Eq17KUQJN2PLM2ODVTkvoT'
@@ -18,7 +18,7 @@ class TestQueryParameters < TestCase
   def assert_canon_params(params, expected)
     actual = @client.send(:encode_params, params)
     assert_equal(expected, actual)
-    end
+  end
 
   def test_simple
     assert_canon_params(

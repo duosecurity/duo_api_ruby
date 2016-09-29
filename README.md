@@ -1,43 +1,56 @@
 # Overview
 
-**duo_api_ruby** - Reference client for calling Duo Security API
-methods with Ruby.
+**Auth** - https://www.duosecurity.com/docs/authapi
 
-# Duo Auth API
+**Verify** - https://www.duosecurity.com/docs/duoverify
 
-The Duo Auth API provides a low-level API for adding strong two-factor
-authentication to applications that cannot directly display rich web
-content.
+**Admin** - https://www.duosecurity.com/docs/adminapi
 
-For more information see the Duo Auth API guide:
+**Accounts** - https://www.duosecurity.com/docs/accountsapi
 
-<http://www.duosecurity.com/docs/authapi>
+# Installing
 
-# Duo Admin API
+Development:
 
-The Duo Admin API provides programmatic access to the administrative
-functionality of Duo Security's two-factor authentication platform.
-This feature is not available with all Duo accounts.
+```
+$ git clone https://github.com/duosecurity/duo_api_ruby.git
+$ cd duo_api_ruby
+```
 
-For more information see the Duo Admin API guide:
+System:
 
-<http://www.duosecurity.com/docs/adminapi>
+```
+$ gem install duo_api
+```
 
-# Duo Verify API
+Or add the following to your project:
 
-The Duo Verify API provides the ability to call or text (SMS) a phone
-number with a one-time PIN number.
+```
+gem 'duo_api', '~> 1.0'
+```
 
-For more information see the Duo Verify API guide:
+# Using
 
-<http://www.duosecurity.com/docs/duoverify>
+TODO
 
-# Duo Accounts API
+# Testing
 
-The Duo Accounts API allows a parent account to create, manage, and
-delete other Duo customer accounts. This feature is not available with
-all Duo accounts.
+```
+$ rake
+Loaded suite /usr/lib/ruby/vendor_ruby/rake/rake_test_loader
+Started
+........
 
-For more information see the Duo Accounts API guide:
+Finished in 0.002024715 seconds.
+--------------------------------------------------------------------------------------------------------
+8 tests, 10 assertions, 0 failures, 0 errors, 0 pendings, 0 omissions, 0 notifications
+100% passed
+--------------------------------------------------------------------------------------------------------
+3951.17 tests/s, 4938.97 assertions/s
+```
 
-<http://www.duosecurity.com/docs/accountsapi>
+# Linting
+
+```
+$ rubocop
+```
