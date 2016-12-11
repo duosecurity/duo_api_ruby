@@ -1,7 +1,5 @@
-require 'openssl'
 require 'net/https'
 require 'time'
-require 'uri'
 
 ##
 # A Ruby implementation of the Duo API
