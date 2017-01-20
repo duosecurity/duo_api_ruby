@@ -13,6 +13,14 @@ class TestCase < Test::Unit::TestCase
 
 end
 
+class TestCertificateAuthority < TestCase
+
+  def test_default_ca_file_exists
+    assert_equal(true, File.exist?(@client.ca_file))
+  end
+
+end
+
 class TestQueryParameters < TestCase
 
   def assert_canon_params(params, expected)

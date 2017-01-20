@@ -8,8 +8,9 @@ require 'uri'
 #
 class DuoApi
   @@encode_regex = Regexp.new('[^-_.~a-zA-Z\\d]')
+  attr_accessor :ca_file
 
-  def initialize(ikey, skey, host, proxy = nil)
+  def initialize(ikey, skey, host, proxy = nil, ca_file: nil)
     @ikey = ikey
     @skey = skey
     @host = host
@@ -24,6 +25,8 @@ class DuoApi
         proxy_uri.password
       ]
     end
+    @ca_file = ca_file ||
+               File.join(File.dirname(__FILE__), '..', 'ca_certs.pem')
   end
 
   def request(method, path, params = nil)
@@ -34,10 +37,8 @@ class DuoApi
     request.basic_auth(@ikey, signed)
     request['Date'] = current_date
 
-    ca_file = File.join(File.dirname(__FILE__), 'ca_certs.pem')
-
     Net::HTTP.start(uri.host, uri.port, *@proxy,
-                    use_ssl: true, ca_file: ca_file,
+                    use_ssl: true, ca_file: @ca_file,
                     verify_mode: OpenSSL::SSL::VERIFY_PEER) do |http|
       http.request(request)
     end
