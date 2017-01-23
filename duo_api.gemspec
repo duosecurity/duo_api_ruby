@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'duo_api'
-  s.version     = '1.0.0'
+  s.version     = '1.0.1'
   s.summary     = 'Duo API Ruby'
   s.description = 'A Ruby implementation of the Duo API.'
   s.email       = 'support@duo.com'
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
     'lib/duo_api.rb',
     'ca_certs.pem'
   ]
-  s.add_development_dependency 'rake', '~> 0'
-  s.add_development_dependency 'rubocop', '~> 0'
-  s.add_development_dependency 'test-unit', '~> 0'
+  s.add_development_dependency 'rake', '~> 12.0'
+  s.add_development_dependency 'rubocop', '~> 0.46.0'
+  s.add_development_dependency 'test-unit', '~> 3.2'
 end
