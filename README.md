@@ -1,5 +1,7 @@
 # Overview
 
+[![Build Status](https://travis-ci.org/duosecurity/duo_api_ruby.svg?branch=master)](https://travis-ci.org/duosecurity/duo_api_ruby)
+
 **Auth** - https://www.duosecurity.com/docs/authapi
 
 **Verify** - https://www.duosecurity.com/docs/duoverify
