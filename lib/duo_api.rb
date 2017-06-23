@@ -10,7 +10,7 @@ class DuoApi
   @@encode_regex = Regexp.new('[^-_.~a-zA-Z\\d]')
   attr_accessor :ca_file
 
-  def initialize(ikey, skey, host, proxy = nil, ca_file: nil)
+  def initialize(ikey, skey, host, proxy = nil, ca_file = nil)
     @ikey = ikey
     @skey = skey
     @host = host
