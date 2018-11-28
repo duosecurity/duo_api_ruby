@@ -10,8 +10,8 @@ end
 # Initialize the api
 client = DuoApi.new IKEY, SKEY, HOST
 
-# EXAMPLE 1: Get all users
-resp = client.request 'GET', '/admin/v1/users'
+# EXAMPLE 1: Get the first 100 users
+resp = client.request 'GET', '/admin/v1/users', {limit: '100', offset:'0'}
 
 # print out some info from the response
 puts resp.code

@@ -35,6 +35,13 @@ class TestQueryParameters < TestCase
     )
   end
 
+  def test_pagination_params
+    assert_canon_params(
+      {'limit' => '100', 'offset' => '0'},
+      'limit=100&offset=0',
+    )
+  end
+
   def test_zero_params
     assert_canon_params(
       {},
