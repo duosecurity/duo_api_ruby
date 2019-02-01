@@ -46,12 +46,23 @@ class DuoApi
 
   private
 
+  def encode_key_val(k, v)
+    # encode the key and the value for a url
+    key = URI.encode(k.to_s, @@encode_regex)
+    value = URI.encode(v.to_s, @@encode_regex)
+    key + '=' + value
+  end
+
   def encode_params(params_hash = nil)
     return '' if params_hash.nil?
     params_hash.sort.map do |k, v|
-      key = URI.encode(k.to_s, @@encode_regex)
-      value = URI.encode(v.to_s, @@encode_regex)
-      key + '=' + value
+      # when it is an array, we want to add that as another param
+      # eg. next_offset = ['1547486297000', '5bea1c1e-612c-4f1d-b310-75fd31385b15']
+      if v.is_a?(Array)
+        encode_key_val(k, v[0]) + '&' + encode_key_val(k, v[1])
+      else
+        encode_key_val(k, v)
+      end
     end.join('&')
   end
 

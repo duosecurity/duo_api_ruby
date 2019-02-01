@@ -31,3 +31,9 @@ puts resp3.body
 # EXAMPLE 4: delete user with user_id: 'DUAE0W526W52YHOBMDO6'
 resp4 = client.request 'DELETE', '/admin/v1/users/DUAE0W526W52YHOBMDO6'
 puts resp4.body
+
+# EXAMPLE 5: Authlog V2. Pagination with next_offset.
+resp5 = client.request 'GET', '/admin/v2/logs/authentication', {'limit': '1', 'mintime': '1546371049194', 'maxtime': '1548963049000'}
+puts resp5.body
+resp6 = client.request 'GET', '/admin/v2/logs/authentication', {'limit': '1', 'mintime': '1546371049194', 'maxtime': '1548963049000', 'next_offset': result["response"]['metadata']['next_offset']}
+puts resp6.body
