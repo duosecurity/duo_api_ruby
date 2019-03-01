@@ -1,9 +1,11 @@
 require 'test/unit'
+require 'mocha/test_unit'
 require 'duo_api'
 
 IKEY = 'test_ikey'
 SKEY = 'gtdfxv9YgVBYcF6dl2Eq17KUQJN2PLM2ODVTkvoT'
 HOST = 'foO.BAr52.cOm'
+
 
 class TestCase < Test::Unit::TestCase
 
@@ -137,6 +139,56 @@ class TestSign < TestCase
       'PoSt', HOST, '/Foo/BaR2/qux', params, :date => expected_date)
     assert_equal(expected_sig, actual_sig)
     assert_equal(expected_date, actual_date)
+  end
+
+end
+
+class MockResponse < Object
+    def initialize(code)
+        @code = code
+    end
+
+    def code()
+        @code
+    end
+end
+
+class TestRetryRequests < TestCase
+  def setup
+      super
+      @mock_http = mock()
+      Net::HTTP.expects(:start).yields(@mock_http)
+
+      @limited_response = MockResponse.new('429')
+      @ok_response = MockResponse.new('200')
+  end
+
+  def test_non_limited_response
+      @mock_http.expects(:request).returns(@ok_response)
+      @client.expects(:sleep).never
+      actual_response = @client.request('GET', '/foo/bar')
+      assert_equal(@ok_response, actual_response)
+  end
+
+  def test_single_limited_response
+      @mock_http.expects(:request).twice.returns(@limited_response, @ok_response)
+      @client.expects(:rand).returns(0.123)
+      @client.expects(:sleep).with(1.123)
+      actual_response = @client.request('GET', '/foo/bar')
+      assert_equal(@ok_response, actual_response)
+  end
+
+  def test_all_limited_responses
+      @mock_http.expects(:request).times(7).returns(@limited_response)
+      @client.expects(:rand).times(6).returns(0.123)
+      @client.expects(:sleep).with(1.123)
+      @client.expects(:sleep).with(2.123)
+      @client.expects(:sleep).with(4.123)
+      @client.expects(:sleep).with(8.123)
+      @client.expects(:sleep).with(16.123)
+      @client.expects(:sleep).with(32.123)
+      actual_response = @client.request('GET', '/foo/bar')
+      assert_equal(@limited_response, actual_response)
   end
 
 end
