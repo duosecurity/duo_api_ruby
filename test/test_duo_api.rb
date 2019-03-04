@@ -144,12 +144,10 @@ class TestSign < TestCase
 end
 
 class MockResponse < Object
+    attr_reader :code
+
     def initialize(code)
         @code = code
-    end
-
-    def code()
-        @code
     end
 end
 

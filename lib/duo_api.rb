@@ -10,6 +10,12 @@ class DuoApi
   @@encode_regex = Regexp.new('[^-_.~a-zA-Z\\d]')
   attr_accessor :ca_file
 
+  # Constants for handling rate limit backoff
+  MAX_BACKOFF_WAIT_SECS = 32
+  INITIAL_BACKOFF_WAIT_SECS = 1
+  BACKOFF_FACTOR = 2
+  RATE_LIMITED_RESP_CODE = '429'
+
   def initialize(ikey, skey, host, proxy = nil, ca_file: nil)
     @ikey = ikey
     @skey = skey
@@ -27,12 +33,6 @@ class DuoApi
     end
     @ca_file = ca_file ||
                File.join(File.dirname(__FILE__), '..', 'ca_certs.pem')
-
-    # Constants for handling rate limit backoff
-    @MAX_BACKOFF_WAIT_SECS = 32
-    @INITIAL_BACKOFF_WAIT_SECS = 1
-    @BACKOFF_FACTOR = 2
-    @RATE_LIMITED_RESP_CODE = '429'
   end
 
   def request(method, path, params = nil)
@@ -45,16 +45,16 @@ class DuoApi
 
     Net::HTTP.start(uri.host, uri.port, *@proxy,
                     use_ssl: true, ca_file: @ca_file,
-                    verify_mode: OpenSSL::SSL::VERIFY_PEER) do |http|
-      wait_secs = @INITIAL_BACKOFF_WAIT_SECS
+                    verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+      wait_secs = INITIAL_BACKOFF_WAIT_SECS
       while true do
         resp = http.request(request)
-        if resp.code != @RATE_LIMITED_RESP_CODE or wait_secs > @MAX_BACKOFF_WAIT_SECS
+        if resp.code != RATE_LIMITED_RESP_CODE or wait_secs > MAX_BACKOFF_WAIT_SECS
             return resp
         end
         random_offset = rand()
         sleep(wait_secs + random_offset)
-        wait_secs *= @BACKOFF_FACTOR
+        wait_secs *= BACKOFF_FACTOR
       end
     end
   end
