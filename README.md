@@ -1,6 +1,10 @@
 # Overview
 
 [![Build Status](https://travis-ci.org/duosecurity/duo_api_ruby.svg?branch=master)](https://travis-ci.org/duosecurity/duo_api_ruby)
+[![Issues](https://img.shields.io/github/issues/duosecurity/duo_api_ruby)](https://github.com/duosecurity/duo_api_ruby/issues)
+[![Forks](https://img.shields.io/github/forks/duosecurity/duo_api_ruby)](https://github.com/duosecurity/duo_api_ruby/network/members)
+[![Stars](https://img.shields.io/github/stars/duosecurity/duo_api_ruby)](https://github.com/duosecurity/duo_api_ruby/stargazers)
+[![License](https://img.shields.io/badge/License-View%20License-orange)](https://github.com/duosecurity/duo_api_ruby/blob/master/LICENSE)
 
 **Auth** - https://www.duosecurity.com/docs/authapi
 
