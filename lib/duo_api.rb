@@ -1,3 +1,4 @@
+require 'erb'
 require 'openssl'
 require 'net/https'
 require 'time'
@@ -7,7 +8,6 @@ require 'uri'
 # A Ruby implementation of the Duo API
 #
 class DuoApi
-  @@encode_regex = Regexp.new('[^-_.~a-zA-Z\\d]')
   attr_accessor :ca_file
 
   # Constants for handling rate limit backoff
@@ -64,8 +64,8 @@ class DuoApi
 
   def encode_key_val(k, v)
     # encode the key and the value for a url
-    key = URI.encode(k.to_s, @@encode_regex)
-    value = URI.encode(v.to_s, @@encode_regex)
+    key = ERB::Util.url_encode(k.to_s)
+    value = ERB::Util.url_encode(v.to_s)
     key + '=' + value
   end
 
