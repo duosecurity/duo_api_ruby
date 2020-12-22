@@ -42,11 +42,11 @@ class DuoApi
     request = Net::HTTP.const_get(method.capitalize).new uri.to_s
     request.basic_auth(@ikey, signed)
     request['Date'] = current_date
-    request['User-Agent'] = 'duo_api_ruby/1.1.0'
+    request['User-Agent'] = 'duo_api_ruby/1.2.0'
 
     Net::HTTP.start(uri.host, uri.port, *@proxy,
                     use_ssl: true, ca_file: @ca_file,
-                    verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+                    verify_mode: OpenSSL::SSL::VERIFY_PEER) do |http|
       wait_secs = INITIAL_BACKOFF_WAIT_SECS
       while true do
         resp = http.request(request)
