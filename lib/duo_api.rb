@@ -106,6 +106,6 @@ class DuoApi
 
   def sign(method, host, path, params, options = {})
     date, canon = canonicalize(method, host, path, params, date: options[:date])
-    [date, OpenSSL::HMAC.hexdigest('sha1', @skey, canon)]
+    [date, OpenSSL::HMAC.hexdigest('sha512', @skey, canon)]
   end
 end
