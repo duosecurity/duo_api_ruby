@@ -126,7 +126,7 @@ class TestCanonicalize < TestCase
 end
 
 class TestSign < TestCase
-  def test_hmac_sha1
+  def test_hmac_sha512
     params = {
       "\u469a\u287b\u35d0\u8ef3\u6727\u502a\u0810\ud091\u00c8\uc170" => "\u0f45\u1a76\u341a\u654c\uc23f\u9b09\uabe2\u8343\u1b27\u60d0",
       "\u7449\u7e4b\uccfb\u59ff\ufe5f\u83b7\uadcc\u900c\ucfd1\u7813" => "\u8db7\u5022\u92d3\u42ef\u207d\u8730\uacfe\u5617\u0946\u4e30",
@@ -134,7 +134,7 @@ class TestSign < TestCase
       "\uc2c5\u2c1d\u2620\u3617\u96b3F\u8605\u20e8\uac21\u5934" => "\ufba9\u41aa\ubd83\u840b\u2615\u3e6e\u652d\ua8b5\ud56bU"
     }
     expected_date = 'Fri, 07 Dec 2012 17:18:00 -0000'
-    expected_sig = 'f01811cbbf9561623ab45b893096267fd46a5178'
+    expected_sig = '0508065035a03b2a1de2f453e629e791d180329e157f65df6b3e0f08299d4321e1c5c7a7c7ee6b9e5fc80d1fb6fbf3ad5eb7c44dd3b3985a02c37aca53ec3698'
     actual_date, actual_sig = @client.send(:sign,
       'PoSt', HOST, '/Foo/BaR2/qux', params, :date => expected_date)
     assert_equal(expected_sig, actual_sig)
