@@ -13,8 +13,10 @@
 **Accounts** - https://www.duosecurity.com/docs/accountsapi
 
 ## Tested Against Ruby Versions:
-* 2.6
 * 2.7
+* 3.0
+* 3.1
+* 3.2
 
 # Installing
 
