@@ -9,6 +9,7 @@ on:
 
 jobs:
   ruby-ci:
+    name: Ruby CI - test
     runs-on: ubuntu-latest
 
     strategy:
