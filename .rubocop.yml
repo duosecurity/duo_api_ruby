@@ -1,0 +1,78 @@
+##
+# AllCops (Global)
+#
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - vendor/**/*
+
+##
+# Layout
+#
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  EnforcedLastArgumentHashStyle: ignore_implicit
+
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyle: no_space
+
+##
+# Metrics
+#
+Metrics/AbcSize:
+  Max: 20
+  CountRepeatedAttributes: false
+  Exclude:
+    - test/**/*
+  AllowedMethods:
+    - request
+    - get_all
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  AllowedMethods:
+    - get_all
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Max: 6
+  CountKeywordArgs: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+##
+# Naming
+#
+Naming/AccessorMethodName:
+  Exclude:
+    - lib/duo_api/*
+
+##
+# Style
+#
+Style/NumericLiterals:
+  Enabled: false
+
+Style/Documentation:
+  Exclude:
+    - test/**/*
+
+##
+# Gemspec
+#
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
+
+Gemspec/RequireMFA:
+  Enabled: false
