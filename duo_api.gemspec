@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'duo_api'
-  s.version     = '1.5.0'
+  s.version     = '1.5.1'
   s.summary     = 'Duo API Ruby'
   s.description = 'A Ruby implementation of the Duo API.'
   s.email       = 'support@duo.com'
