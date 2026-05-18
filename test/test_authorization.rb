@@ -36,10 +36,11 @@ class TestAuthorization < HTTPTestCase
     mock_resp = Net::HTTPSuccess.new('200', response_body, { 'Content-Type': 'application/json' })
     @mock_http.expects(:request).returns(mock_resp)
 
-    result = @authz_api.evaluate(
+    capabilities = DuoApi::Authorization::McpCapabilities.new(
       access_token: 'test_token',
       mcp_server_id: 'server_123'
     )
+    result = @authz_api.evaluate(capabilities)
 
     assert_equal ['tool_call'], result[:allowed_capabilities]
     assert_equal true, result[:authorized]
@@ -64,22 +65,19 @@ class TestAuthorization < HTTPTestCase
     mock_resp = Net::HTTPSuccess.new('200', response_body, { 'Content-Type': 'application/json' })
     @mock_http.expects(:request).returns(mock_resp)
 
-    assert_nothing_raised do
-      @authz_api.evaluate(
-        access_token: 'test_token',
-        mcp_server_id: 'server_123',
-        mcp_server_name: 'my_server',
-        tool: 'my_tool'
-      )
-    end
+    capabilities = DuoApi::Authorization::McpCapabilities.new(
+      access_token: 'test_token',
+      mcp_server_id: 'server_123',
+      mcp_server_name: 'my_server',
+      tool: 'my_tool'
+    )
+    assert_nothing_raised{ @authz_api.evaluate(capabilities) }
   end
 
   def test_evaluate_missing_required_args
     @mock_http.expects(:request).times(0)
-    required_args = %i[access_token mcp_server_id]
-    assert_raise_with_message(
-      ArgumentError,
-      missing_keywords_message(required_args)
-    ){ @authz_api.evaluate }
+    assert_raise(ArgumentError) do
+      DuoApi::Authorization::McpCapabilities.new
+    end
   end
 end

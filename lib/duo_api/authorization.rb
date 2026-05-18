@@ -8,7 +8,15 @@ class DuoApi
   # Duo Authorization API
   #
   class Authorization < DuoApi
-    MCP_CAPABILITIES_ROUTE = 'mcp_capabilities'
+    McpCapabilities = Data.define(:access_token, :mcp_server_id, :mcp_server_name, :tool) do
+      def initialize(access_token:, mcp_server_id:, mcp_server_name: '', tool: nil)
+        super
+      end
+
+      def route_fragment
+        'mcp_capabilities'
+      end
+    end
 
     def ping
       get('/authorize/v1/ping')[:response]
@@ -18,15 +26,15 @@ class DuoApi
       get('/authorize/v1/check')[:response]
     end
 
-    def evaluate(access_token:, mcp_server_id:, mcp_server_name: '', tool: nil)
+    def evaluate(input)
       params = {
-        access_token: access_token,
-        mcp_server_id: mcp_server_id,
-        mcp_server_name: mcp_server_name
+        access_token: input.access_token,
+        mcp_server_id: input.mcp_server_id,
+        mcp_server_name: input.mcp_server_name
       }
-      params[:tool] = tool unless tool.nil?
+      params[:tool] = input.tool unless input.tool.nil?
 
-      response = post("/authorize/v1/#{MCP_CAPABILITIES_ROUTE}/evaluate", params)[:response]
+      response = post("/authorize/v1/#{input.route_fragment}/evaluate", params)[:response]
       {
         allowed_capabilities: response[:allowed_capabilities],
         authorized: response[:authorized],
