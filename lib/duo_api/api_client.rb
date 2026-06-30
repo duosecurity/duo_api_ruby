@@ -13,7 +13,7 @@ require 'uri'
 #
 class DuoApi
   attr_accessor :ca_file
-  attr_reader :default_params
+  attr_reader :default_params, :ca_pinning_disabled
 
   VERSION = Gem.loaded_specs['duo_api'] ? Gem.loaded_specs['duo_api'].version : '0.0.0'
 
@@ -22,7 +22,7 @@ class DuoApi
   INITIAL_BACKOFF_WAIT_SECS = 1
   BACKOFF_FACTOR = 2
 
-  def initialize(ikey, skey, host, proxy = nil, ca_file: nil, default_params: {})
+  def initialize(ikey, skey, host, proxy = nil, ca_file: nil, disable_ca_pinning: false, default_params: {})
     @ikey = ikey
     @skey = skey
     @host = host
@@ -38,8 +38,15 @@ class DuoApi
         proxy_uri.password
       ]
     end
-    @ca_file = ca_file ||
-               File.join(File.dirname(__FILE__), '..', '..', 'ca_certs.pem')
+
+    raise ArgumentError, 'Cannot both disable CA pinning and provide a custom CA file' if disable_ca_pinning && ca_file
+
+    @ca_pinning_disabled = disable_ca_pinning
+    @ca_file = if disable_ca_pinning
+                 nil
+               else
+                 ca_file || File.join(File.dirname(__FILE__), '..', '..', 'ca_certs.pem')
+               end
     @default_params = default_params.transform_keys(&:to_sym)
   end
 
@@ -80,11 +87,9 @@ class DuoApi
     end
 
     # Start the HTTP session
-    Net::HTTP.start(
-      uri.host, uri.port, *@proxy,
-      use_ssl: true, ca_file: @ca_file,
-      verify_mode: OpenSSL::SSL::VERIFY_PEER
-    ) do |http|
+    http_opts = { use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER }
+    http_opts[:ca_file] = @ca_file if @ca_file
+    Net::HTTP.start(uri.host, uri.port, *@proxy, **http_opts) do |http|
       wait_secs = INITIAL_BACKOFF_WAIT_SECS
       loop do
         resp = http.request(request)
