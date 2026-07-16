@@ -65,3 +65,51 @@ class TestDisableCaPinningHTTP < BaseTestCase
     @client_unpinned.request('GET', '/foo/bar')
   end
 end
+
+class TestUserAgent < BaseTestCase
+  def test_user_agent_includes_ca_bundle_version
+    assert_include(@client.send(:user_agent), "ca_bundle/#{DuoApi::CA_BUNDLE_VERSION}")
+  end
+
+  def test_user_agent_pinning_enabled_by_default
+    client = DuoApi.new(IKEY, SKEY, HOST)
+    assert_equal(
+      "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=enable)",
+      client.send(:user_agent)
+    )
+  end
+
+  def test_user_agent_pinning_disabled
+    client = DuoApi.new(IKEY, SKEY, HOST, nil, disable_ca_pinning: true)
+    assert_equal(
+      "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=disable)",
+      client.send(:user_agent)
+    )
+  end
+end
+
+class TestUserAgentHeader < BaseTestCase
+  def setup
+    @client_pinned = DuoApi.new(IKEY, SKEY, HOST)
+    @client_unpinned = DuoApi.new(IKEY, SKEY, HOST, nil, disable_ca_pinning: true)
+    @mock_http = mock
+    @ok_resp = Net::HTTPSuccess.new('200')
+  end
+
+  def assert_user_agent_header(client, expected_state)
+    Net::HTTP.expects(:start).yields(@mock_http)
+    @mock_http.expects(:request).with do |request|
+      request['User-Agent'] ==
+        "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=#{expected_state})"
+    end.returns(@ok_resp)
+    client.request('GET', '/foo/bar')
+  end
+
+  def test_pinned_client_sets_user_agent_header
+    assert_user_agent_header(@client_pinned, 'enable')
+  end
+
+  def test_unpinned_client_sets_user_agent_header
+    assert_user_agent_header(@client_unpinned, 'disable')
+  end
+end

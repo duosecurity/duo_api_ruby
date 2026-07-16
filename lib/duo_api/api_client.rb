@@ -17,6 +17,9 @@ class DuoApi
 
   VERSION = Gem.loaded_specs['duo_api'] ? Gem.loaded_specs['duo_api'].version : '0.0.0'
 
+  # Version of the bundled CA certificate collection
+  CA_BUNDLE_VERSION = '1.0'
+
   # Constants for handling rate limit backoff
   MAX_BACKOFF_WAIT_SECS = 32
   INITIAL_BACKOFF_WAIT_SECS = 1
@@ -78,7 +81,7 @@ class DuoApi
     request = Net::HTTP.const_get(method.capitalize).new(uri.to_s)
     request.basic_auth(@ikey, signed)
     request['Date'] = current_date
-    request['User-Agent'] = "duo_api_ruby/#{VERSION}"
+    request['User-Agent'] = user_agent
 
     # Set Content-Type and request body for JSON requests
     if params_go_in_body
@@ -105,6 +108,13 @@ class DuoApi
   end
 
   private
+
+  # Build the User-Agent string, including the CA bundle version and the
+  # current CA pinning state.
+  def user_agent
+    ca_pinning_state = @ca_pinning_disabled ? 'disable' : 'enable'
+    "duo_api_ruby/#{VERSION} ca_bundle/#{CA_BUNDLE_VERSION} (ca_pinning=#{ca_pinning_state})"
+  end
 
   # Encode a key-value pair for a URL
   def encode_key_val(key, val)
