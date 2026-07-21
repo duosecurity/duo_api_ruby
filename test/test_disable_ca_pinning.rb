@@ -74,7 +74,7 @@ class TestUserAgent < BaseTestCase
   def test_user_agent_pinning_enabled_by_default
     client = DuoApi.new(IKEY, SKEY, HOST)
     assert_equal(
-      "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=enable)",
+      "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=enabled)",
       client.send(:user_agent)
     )
   end
@@ -82,7 +82,7 @@ class TestUserAgent < BaseTestCase
   def test_user_agent_pinning_disabled
     client = DuoApi.new(IKEY, SKEY, HOST, nil, disable_ca_pinning: true)
     assert_equal(
-      "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=disable)",
+      "duo_api_ruby/#{DuoApi::VERSION} ca_bundle/#{DuoApi::CA_BUNDLE_VERSION} (ca_pinning=disabled)",
       client.send(:user_agent)
     )
   end
@@ -106,10 +106,10 @@ class TestUserAgentHeader < BaseTestCase
   end
 
   def test_pinned_client_sets_user_agent_header
-    assert_user_agent_header(@client_pinned, 'enable')
+    assert_user_agent_header(@client_pinned, 'enabled')
   end
 
   def test_unpinned_client_sets_user_agent_header
-    assert_user_agent_header(@client_unpinned, 'disable')
+    assert_user_agent_header(@client_unpinned, 'disabled')
   end
 end

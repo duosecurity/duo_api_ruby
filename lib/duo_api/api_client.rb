@@ -112,7 +112,7 @@ class DuoApi
   # Build the User-Agent string, including the CA bundle version and the
   # current CA pinning state.
   def user_agent
-    ca_pinning_state = @ca_pinning_disabled ? 'disable' : 'enable'
+    ca_pinning_state = @ca_pinning_disabled ? 'disabled' : 'enabled'
     "duo_api_ruby/#{VERSION} ca_bundle/#{CA_BUNDLE_VERSION} (ca_pinning=#{ca_pinning_state})"
   end
 
