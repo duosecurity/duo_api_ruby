@@ -47,7 +47,7 @@ admin_api.create_user(**new_user)
 TODO: MORE EXAMPLES HERE
 ```
 
-### Making Accounts API requests using `DuoApi::Accounts`
+### Making Admin API requests using `DuoApi::Accounts`
 ###### - These methods return only the Array, Hash, or String response data from the parsed JSON response body
 ```
 require 'duo_api'
@@ -58,7 +58,7 @@ accounts_api = DuoApi::Accounts.new(IKEY, SKEY, HOST)
 # EXAMPLE 1: List child accounts
 child_accounts = accounts_api.get_child_accounts()
 
-# EXAMPLE 2: Use Accounts API to make Admin API calls on child account
+# EXAMPLE 2: Use Admin API calls on child account
 account_id = 'DAFAKECHILDACCOUNTID'
 child_account_admin_api = accounts_api.admin_api(child_account_id: account_id)
 child_account_users = child_account_admin_api.get_users()

@@ -10,7 +10,8 @@
 
 **Admin** - https://www.duosecurity.com/docs/adminapi
 
-**Accounts** - https://www.duosecurity.com/docs/accountsapi
+  - **Subaccount access** - https://duo.com/docs/adminapi#subaccounts
+
 
 # Compatibility
 While the gem should work for Ruby versions >= 2.5, tests and linting may only work properly on Ruby versions >= 3.0.

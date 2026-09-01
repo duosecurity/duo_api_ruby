@@ -7,11 +7,11 @@ require_relative 'admin'
 
 class DuoApi
   ##
-  # Duo Accounts API (https://duo.com/docs/accountsapi)
+  # Subaccount management in Admin API (https://duo.com/docs/adminapi#subaccounts)
   #
   class Accounts < DuoApi
     ##
-    # Accounts API
+    # Admin API
     #
     def get_child_accounts
       post('/accounts/v1/account/list')[:response]
